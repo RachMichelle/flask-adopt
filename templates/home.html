@@ -4,6 +4,27 @@
 
 {% block content %}
 
-<p>pet list here</p>
+<div class="mb-3" style="text-align:center">
+    <a class='btn btn-primary' href="/pets/new" role="button">Add A Pet</a>
+</div>
+
+{% for pet_row in pets | batch(3, '&nbsp;') %}
+<div class="row justify-content-center">
+    {% for pet in pet_row%}
+    <div class="card" style="width: 18rem;">
+        <img src="{{pet.photo_url}}" class="card-img-top" alt="{{pet.name}} photo">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center">{{pet.name}}</h5>
+            {% if pet.available %}
+            <p class="card-text fw-bold text-success text-center">Available!</p>
+            {% else %}
+            <p class="card-text text-center">Unavailable</p>
+            {% endif %}
+            <a class="mt-auto btn btn-secondary btn-sm" href="/pets/{{pet.id}}/edit" role="button">Edit</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
 
 {% endblock %}
