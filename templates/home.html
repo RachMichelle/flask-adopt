@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="mb-3" style="text-align:center">
-    <a class='btn btn-primary' href="/pets/new" role="button">Add A Pet</a>
+    <a class='btn btn-primary' href="/pets/add" role="button">Add A Pet</a>
 </div>
 
 {% for pet_row in pets | batch(3, '&nbsp;') %}

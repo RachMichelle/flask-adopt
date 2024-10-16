@@ -1,3 +1,5 @@
+"""models for adoption page"""
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
