@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{pet.name}}{% endblock %}
+
+{% block header %}{{pet.name}}{% endblock %}
+
+{% block content %}
+
+<div class="card mb-3 text-center border-0">
+    <div class="row justify-content-center">
+        <img src="{{pet.photo_url}}" class="card-img-top" alt="{{pet.name}} photo"
+            style="max-width: 50%;">
+    </div>
+    <div class="card-body">
+        {% if pet.note %}
+        <p class="card-text">{{pet.note}}</p>
+        {% endif %}
+        <ul class="list-group list-group-flush border-0">
+            <li class="list-group-item">Species: {{pet.species}}</li>
+            {% if pet.age %}
+            <li class="list-group-item">Age: {{pet.age}}</li>
+            {% endif %}
+        </ul>
+
+        <a class="btn btn-secondary" href="/pets/{{pet.id}}/edit" role="button">Edit Pet</a>
+        <a class="btn btn-primary" href="/" role="button">Back To All Pets</a>
+
+    </div>
+</div>
+
+{% endblock %}
