@@ -1,0 +1,48 @@
+<!-- edit pet form -->
+{% extends 'base.html' %}
+
+{% block title %}Edit Pet{% endblock %}
+
+{% block header %}Edit Pet{% endblock %}
+
+{% block content %}
+
+<form id="edit-pet-form" method="post">
+    {{ form.hidden_tag() }}
+
+    {% for field in form
+    if field.widget.input_type != 'hidden' %}
+    {% if field.type == 'BooleanField' %}
+    <!-- make sure checkbox is properly formatted with bootstrap classes -->
+    <div class="row justify-content-center">
+        <div class="mb-3 col-6">
+            {{ field.label (class_="form-check-label") }}
+            {{ field (class_="form-check-input") }}
+            {% for error in field.errors %}
+            <small class="text-danger">{{error}}</small>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <!-- all other fields -->
+    <div class="row justify-content-center">
+        <div class="mb-3 col-6">
+            {{ field.label (class_="form-label") }}
+            {{ field (class_="form-control") }}
+            {% for error in field.errors %}
+            <small class="text-danger">{{error}}</small>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+    <!-- submit and cancel buttons; cancel goes back to pet info page -->
+    <div class="mt-2 text-center">
+        <button class="btn btn-success">Save Changes</button>
+        <a class="btn btn-secondary" href="/pets/{{pet.id}}" role="button">Cancel</a>
+    </div>
+</form>
+
+{% endblock %}

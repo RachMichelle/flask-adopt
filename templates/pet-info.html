@@ -1,3 +1,4 @@
+<!-- page for expanded pet info -->
 {% extends 'base.html' %}
 
 {% block title %}{{pet.name}}{% endblock %}
@@ -6,22 +7,38 @@
 
 {% block content %}
 
+<!-- flash message for saved changes when pet is edited -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for msg in messages %}
+<p class="text-center text-success">{{msg}}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
 <div class="card mb-3 text-center border-0">
     <div class="row justify-content-center">
-        <img src="{{pet.photo_url}}" class="card-img-top" alt="{{pet.name}} photo"
-            style="max-width: 50%;">
+        <img src="{{pet.photo_url}}" class="card-img-top" alt="{{pet.name}} photo" style="max-width: 50%;">
     </div>
     <div class="card-body">
-        {% if pet.note %}
-        <p class="card-text">{{pet.note}}</p>
+        {% if pet.available %}
+        <!-- formatting for available vs unavailable -->
+        <h5 class="card-title fw-bold text-success text-center">Available!</h5>
+        {% else %}
+        <h5 class="card-title text-center text-secondary">Unavailable</h5>
+        {% endif %}
+        <!-- only show notes if data available -->
+        {% if pet.notes %}
+        <p class="card-text fst-italic">{{pet.notes}}</p>
         {% endif %}
         <ul class="list-group list-group-flush border-0">
             <li class="list-group-item">Species: {{pet.species}}</li>
+            <!-- only show age if data available -->
             {% if pet.age %}
             <li class="list-group-item">Age: {{pet.age}}</li>
             {% endif %}
         </ul>
-
+        <!-- buttons to go to edit page or cancel & go back to home page -->
         <a class="btn btn-secondary" href="/pets/{{pet.id}}/edit" role="button">Edit Pet</a>
         <a class="btn btn-primary" href="/" role="button">Back To All Pets</a>
 

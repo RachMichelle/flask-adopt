@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Pet
-from forms import PetForm
+from forms import PetForm, EditPetForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///adopt_db'
@@ -18,7 +18,7 @@ connect_db(app)
 def show_home():
     """home page with pet list"""
 
-    pets = Pet.query.all()
+    pets = Pet.query.order_by(Pet.available.desc())
 
     return render_template('home.html', pets=pets)
 
@@ -32,7 +32,7 @@ def show_pet_info(pet_id):
 
 @app.route('/pets/add', methods = ['GET', 'POST'])
 def new_pet_form():
-    """show or submit new pet form"""
+    """get & post route, show or handle new pet form"""
 
     form=PetForm()
 
@@ -61,5 +61,23 @@ def new_pet_form():
 
 @app.route('/pets/<pet_id>/edit', methods =['GET', 'POST'])
 def edit_pet_info(pet_id):
+    """get & post route, show or handle form to edit pet information"""
+    
     pet = Pet.query.get_or_404(pet_id)
-    return f"Viewing edit page for {pet.name}, id {pet.id}"
+    form = EditPetForm(obj=pet)
+
+    if form.validate_on_submit():
+        pet.name=form.name.data
+        pet.species=form.species.data
+        pet.photo_url=form.photo_url.data
+        pet.age=form.age.data
+        pet.notes=form.notes.data
+        pet.available=form.available.data
+
+        db.session.commit()
+
+        flash(f'Changes to {pet.name} saved!')
+        return redirect(f'/pets/{pet_id}')
+    
+    else:
+        return render_template('edit-pet-form.html', pet=pet, form=form)  
